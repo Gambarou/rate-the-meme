@@ -26,12 +26,11 @@ const Auth = () => {
     })
 
     return (
-      <div className="relative h-screen w-full bg-[url('/Users/peelintaters/Desktop/solo-project/public/images/background.png')] bg-no-repeat bg-center bg-fixed bg-cover">
+      <div className={`relative h-screen w-full bg-no-repeat bg-center bg-fixed bg-cover`}>
         <div className="bg-black w-full h-full lg:bg-opacity-50">
-          <nav className="px-12 py-5 flex items-center justify-center">
-               {/* <img src={logo} alt="logo" className="h-24 mr-4" /> */}
-               <span className="text-white text-4xl font-semibold mt-8 mb-8">ℝ𝕒𝕥𝕖 𝕥𝕙𝕖 𝕄𝕖𝕞𝕖</span>
-          </nav>
+          <div className="px-12 py-5 flex flex-col items-center justify-center">
+              <div className="text-white text-4xl font-semibold mt-20 mb-4">ℝ𝕒𝕥𝕖 𝕥𝕙𝕖 𝕄𝕖𝕞𝕖</div>
+          </div>
           <div className="flex justify-center">
             <div className="bg-black bg-opacity-70 px-16 py-16 self-center mt-2 lg:w-2/5 lg:max-w-md rounded-md w-full">
               <h2 className="text-white text-2xl mb-8 font-semibold">
