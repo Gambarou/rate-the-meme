@@ -1,15 +1,16 @@
 import React, { useCallback, useState } from "react";
-// import axios from 'axios';
+import axios from 'axios';
 import Input from './Input';
-import logo from '../../public/images/logo.png';
+import User from '../../server/models/userModel.js';
 
 import { FcGoogle } from 'react-icons/fc';
 import { FaGithub } from 'react-icons/fa';
 
 const Auth = () => {
     const [email, setEmail] = useState('');
-    const [name, setName] = useState('');
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
 
     const [view, setView] = useState('login');
 
@@ -18,12 +19,29 @@ const Auth = () => {
     }, []);
 
     const login = useCallback(async () => {
-        console.log("login feature here");
-    })
+        console.log("Login feature here")
+    }, [email, password]);
 
     const register = useCallback(async () => {
-      console.log('Register feature here')
-    })
+      try {
+        const newUser = await axios.post('api/register', {
+          email,
+          username,
+          password
+        })
+
+        login();
+      } catch (err) {
+        if (err.response && err.response.status === 422) {
+          setError('Email already taken. Please choose a different email.');
+        } else {
+          setError('Error registering user.')
+        }
+        setEmail('');
+        setUsername('');
+        setPassword('');
+      }
+    }, [email, password, username, login, setError]);
 
     return (
       <div className={`relative h-screen w-full bg-no-repeat bg-center bg-fixed bg-cover`}>
@@ -40,9 +58,9 @@ const Auth = () => {
                 {view === 'register' && (
                   <Input
                     label="Username"
-                    onChange={((e) => setName(e.target.value))}
-                    id="name"
-                    value={name}
+                    onChange={((e) => setUsername(e.target.value))}
+                    id="username"
+                    value={username}
                   />
                 )}
                 <Input
@@ -59,6 +77,7 @@ const Auth = () => {
                   type="password"
                   value={password}
                 />
+                {error && <p className="text-red-500 mt-2">{error}</p>}
               </div>
               <button onClick={view === "login" ? login : register} className="bg-red-600 py-3 text-white rounded-md w-full mt-10 hover:bg-red-700 transition">
                 {view === "login" ? "Login" : "Sign up"}

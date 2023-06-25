@@ -1,12 +1,16 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.schema;
+
 
 const SALT_WORK_FACTOR = 10;
 const bcrypt = require('bcryptjs');
 
+
+const Schema = mongoose.Schema;
+
 const userSchema = new Schema({
-  username: {type: String, required: true, unique: true},
-  password: {type: String, required: true}
+  username: { type: String, required: true, unique: true },
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true }
 });
 
 userSchema.pre('save', async function(next) {
@@ -30,8 +34,10 @@ userSchema.statics.comparePassword = async function(password, hashedPassword) {
     const isMatch = await bcrypt.compare(password, hashedPassword);
     return isMatch;
   } catch (err) {
-    throw new Error('Incorrect username or password');
+    console.log(err);
   }
 };
 
-module.exports = mongoose.model('User', userSchema);
+const User = mongoose.model('user', userSchema)
+
+module.exports = User;

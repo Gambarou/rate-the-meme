@@ -5,6 +5,7 @@ module.exports = {
   devServer: {
     static: {
       directory: path.join(__dirname, "/build"),
+      publicPath: '/'
     },
     compress: true,
     port: 8080,
@@ -16,6 +17,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, "build"),
     filename: "bundle.js",
+    publicPath: "/",
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -51,5 +53,12 @@ module.exports = {
         ],
       },
     ],
+  },
+  resolve: {
+    fallback: {
+      crypto: require.resolve('crypto-browserify'),
+      stream: false,
+      buffer: require.resolve('buffer/')
+    },
   },
 };
