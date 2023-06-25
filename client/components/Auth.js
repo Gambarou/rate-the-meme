@@ -1,7 +1,6 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import axios from 'axios';
 import Input from './Input';
-import User from '../../server/models/userModel.js';
 
 import { FcGoogle } from 'react-icons/fc';
 import { FaGithub } from 'react-icons/fa';
@@ -19,12 +18,23 @@ const Auth = () => {
     }, []);
 
     const login = useCallback(async () => {
-        console.log("Login feature here")
+      try {
+        await axios.post('api/login', {
+          username,
+          password
+        })
+      } catch (err) {
+        if (err.response) {
+          setError('Incorrect username or password');
+        }
+        setPassword('');
+      }
+
     }, [email, password]);
 
     const register = useCallback(async () => {
       try {
-        const newUser = await axios.post('api/register', {
+        await axios.post('api/register', {
           email,
           username,
           password
@@ -42,6 +52,21 @@ const Auth = () => {
         setPassword('');
       }
     }, [email, password, username, login, setError]);
+
+    const handleKeyDown = useCallback((e) => {
+      if (e.key === 'Enter') {
+          e.preventDefault();
+          view === 'login' ? login() : register();
+      }
+    }, [login, register, view]);
+
+    useEffect(() => {
+      document.addEventListener('keydown', handleKeyDown);
+
+      return () => {
+          document.removeEventListener('keydown', handleKeyDown);
+      };
+    }, [handleKeyDown]);
 
     return (
       <div className={`relative h-screen w-full bg-no-repeat bg-center bg-fixed bg-cover`}>
@@ -77,7 +102,7 @@ const Auth = () => {
                   type="password"
                   value={password}
                 />
-                {error && <p className="text-red-500 mt-2">{error}</p>}
+                {error && <p className="text-white bg-red-600 px-4 py-3 rounded-md mt-2">{error}</p>}
               </div>
               <button onClick={view === "login" ? login : register} className="bg-red-600 py-3 text-white rounded-md w-full mt-10 hover:bg-red-700 transition">
                 {view === "login" ? "Login" : "Sign up"}

@@ -32,7 +32,7 @@ if (process.env.NODE_ENV === undefined) {
     })
 }
 
-// app.get('/', sessionController.isLoggedIn)
+// app.get('/api/login', sessionController.isLoggedIn)
 
 app.post('/api/register', userController.createUser, cookieController.setSSIDCookie, sessionController.startSession, (req, res) => {
     res.status(200).json(res.locals.newUser);

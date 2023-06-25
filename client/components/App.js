@@ -6,6 +6,7 @@ import {
   RouterProvider,
   Routes,
 } from 'react-router-dom'
+
 import Auth from './Auth';
 
 const router = createBrowserRouter([
@@ -21,6 +22,11 @@ function Root() {
   return (
     <Routes>
       <Route path="/" element={<Auth />}/>
+      <Route path="/home" element={
+        <>
+          <Navbar />
+        </>
+      } />
     </Routes>
   )
 };
