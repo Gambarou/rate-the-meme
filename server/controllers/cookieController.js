@@ -3,14 +3,10 @@ const User = require('../models/userModel');
 const cookierController = {};
 
 cookierController.setSSIDCookie = async (req, res, next) => {
-    const { email } = req.body;
+    const { username } = req.body;
 
     try {
-      const user = await User.findOne({email});
-
-      if (!user) {
-        return res.redirect('/api');
-      }
+      const user = await User.findOne({ username });
 
       res.locals.ssid = user._id;
       res.cookie('ssid', user._id, { httpOnly: true });

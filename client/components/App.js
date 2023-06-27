@@ -1,16 +1,16 @@
 import React from 'react'
 import {
+  Routes,
   createBrowserRouter,
-  Link,
   Route,
   RouterProvider,
-  Routes,
 } from 'react-router-dom'
 
 import Auth from './Auth';
+import Home from './Home';
 
 const router = createBrowserRouter([
-  { path: "*", Component: Root }
+  { path: "*", Component: Root },
 ]);
 
 export default function App() {
@@ -20,13 +20,10 @@ export default function App() {
 function Root() {
 
   return (
-    <Routes>
-      <Route path="/" element={<Auth />}/>
-      <Route path="/home" element={
-        <>
-          <Navbar />
-        </>
-      } />
-    </Routes>
+      <Routes>
+        <Route path="/" element={<Auth />} />
+        <Route path="/home" element={<Home />} />
+      </Routes>
   )
 };
+

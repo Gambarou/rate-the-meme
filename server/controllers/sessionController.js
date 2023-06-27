@@ -14,21 +14,23 @@ sessionController.logout = async (req, res, next) => {
 
  sessionController.isLoggedIn = async (req, res, next) => {
     try {
+      console.log(req.cookies);
       const { token } = req.cookies;
 
       if (!token) {
-        res.redirect('/');
+        res.locals.loggedIn = false;
+        return next();
       }
+
 
       jwt.verify(token, process.env.TOKEN_KEY, (err, decoded) => {
         if (err) {
-          return res.redirect('/');
-        }
-        return next()
+          res.locals.loggedIn = false;
+        } else res.locals.loggedIn = true;
       });
     } catch (err) {
         console.log(`Error: ${err}`);
-        return res.redirect('/');
+        return next(err);
     }
  };
 

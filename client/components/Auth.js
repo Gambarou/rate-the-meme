@@ -1,4 +1,5 @@
 import React, { useCallback, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import Input from './Input';
 
@@ -10,11 +11,32 @@ const Auth = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const [loading, setLoading] = useState(true);
 
     const [view, setView] = useState('login');
+    const navigate = useNavigate();
 
     const toggleView = useCallback(() => {
         setView((currentView) => currentView === 'login' ? 'register' : 'login');
+    }, []);
+
+    useEffect(() => {
+      const checkSession = async () => {
+        try {
+          const res = await axios.get('api/check-session');
+          console.log(res);
+          if (res.status === '200') {
+            navigate('/home');
+          } else {
+            throw new Error('Not logged in');
+          }
+        } catch (error) {
+          // Handle error or redirect to the appropriate route
+          console.log(error);
+        }
+      };
+      console.log("Hello this is me from the future!")
+      checkSession();
     }, []);
 
     const login = useCallback(async () => {
@@ -23,6 +45,7 @@ const Auth = () => {
           username,
           password
         })
+        navigate('/home')
       } catch (err) {
         if (err.response) {
           setError('Incorrect username or password');
@@ -82,18 +105,18 @@ const Auth = () => {
               <div className="flex flex-col gap-4">
                 {view === 'register' && (
                   <Input
-                    label="Username"
-                    onChange={((e) => setUsername(e.target.value))}
-                    id="username"
-                    value={username}
+                    label="Email"
+                    onChange={((e) => setEmail(e.target.value))}
+                    id="email"
+                    type="email"
+                    value={email}
                   />
                 )}
                 <Input
-                  label="Email"
-                  onChange={(e) => setEmail(e.target.value)}
-                  id="email"
-                  type="email"
-                  value={email}
+                  label="Username"
+                  onChange={(e) => setUsername(e.target.value)}
+                  id="username"
+                  value={username}
                 />
                 <Input
                   label="Password"

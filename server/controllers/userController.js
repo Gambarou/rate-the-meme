@@ -25,4 +25,27 @@ userController.createUser = async (req, res, next) => {
   }
 }
 
+userController.verifyUser = async (req, res, next) => {
+  const { username, password } = req.body;
+
+  try {
+    const user = await User.findOne({ username });
+
+    if (!user) {
+      res.locals.isVerified = false;
+      return next();
+    }
+
+    const isMatch = await User.comparePassword(password, user.password);
+
+    if (!isMatch) {
+      res.locals.isVerified = false;
+    } else  res.locals.isVerified = true;
+
+    return next();
+  } catch (err) {
+    return next(err);
+  }
+}
+
 module.exports = userController;
