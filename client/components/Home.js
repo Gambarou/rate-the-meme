@@ -1,11 +1,12 @@
 import React from "react";
 import Navbar from "./Navbar";
+import Images from "./Images";
 
-function Home() {
+function Home({ setIsLoggedIn }) {
     return (
       <>
-        <Navbar />
-        <h1>Welcome to the Home Page!</h1>
+        <Navbar setIsLoggedIn={setIsLoggedIn}/>
+        <Images />
       </>
     )
   }

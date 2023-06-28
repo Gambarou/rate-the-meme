@@ -5,8 +5,9 @@ module.exports = {
   devServer: {
     static: {
       directory: path.join(__dirname, "/build"),
-      publicPath: '/'
+      publicPath: '/',
     },
+    // historyApiFallback: true,
     compress: true,
     port: 8080,
     proxy: {

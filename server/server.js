@@ -42,19 +42,24 @@ app.post('/api/login', userController.verifyUser, cookieController.setSSIDCookie
     }
 })
 
+app.post('/api/logout', (req, res) => {
+    res.clearCookie('token', { httpOnly: true });
+    res.clearCookie('ssid', { httpOnly: true });
+    res.status(200).json({ loggedOut: true });
+  });
+
 app.post('/api/register', userController.createUser, cookieController.setSSIDCookie, sessionController.startSession, (req, res) => {
     res.status(200).json(res.locals.newUser);
 })
 
 app.get('/api/check-session', sessionController.isLoggedIn, (req, res) => {
     if (res.locals.isLoggedIn) {
-        console.log("Logged in")
-        res.sendStatus(200);
-    } else res.sendStatus(401);
+        res.status(200).json({ loggedIn: true });
+    } else res.status(200).json({ loggedIn: false });
 });
 
 app.use('*', (req, res) => {
-    res.status(404).send('Page not found');
+    res.status(404).send('Page not found my MAN!');
 });
 
 

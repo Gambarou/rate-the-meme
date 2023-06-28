@@ -1,29 +1,50 @@
-import React from 'react'
-import {
-  Routes,
-  createBrowserRouter,
-  Route,
-  RouterProvider,
-} from 'react-router-dom'
+import React, { useEffect, useState } from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import axios from 'axios';
 
-import Auth from './Auth';
-import Home from './Home';
+import Auth from "./Auth";
+import Home from "./Home";
 
-const router = createBrowserRouter([
-  { path: "*", Component: Root },
-]);
+// Your App component
+const App = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(() => localStorage.getItem('isLoggedIn') === 'true');
 
-export default function App() {
-  return <RouterProvider router={router} />
-}
+  useEffect(() => {
+    const checkSession = async () => {
+      try {
+        const res = await axios.get('api/check-session');
+        if (!res.data.loggedIn) {
+          setIsLoggedIn(false);
+        } else {
+          console.log('We are logged in')
+          setIsLoggedIn(true);
+        }
+      } catch (error) {
+        // Handle error or redirect to the appropriate route
+        console.log(error);
+      }
+    };
 
-function Root() {
+    checkSession();
+  }, [isLoggedIn])
+
+  useEffect(() => {
+    localStorage.setItem('isLoggedIn', isLoggedIn);
+  }, [isLoggedIn]);
 
   return (
+    <BrowserRouter basename={'/'}>
       <Routes>
-        <Route path="/" element={<Auth />} />
-        <Route path="/home" element={<Home />} />
+        {isLoggedIn ? (
+            <Route path="/" element={<Home setIsLoggedIn={setIsLoggedIn}/>} />
+          ) : (
+            <Route path="/" element={<Auth setIsLoggedIn={setIsLoggedIn} />} />
+          )}
       </Routes>
-  )
+    </BrowserRouter>
+  );
 };
+
+export default App;
+
 

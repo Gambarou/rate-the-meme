@@ -14,7 +14,6 @@ sessionController.logout = async (req, res, next) => {
 
  sessionController.isLoggedIn = async (req, res, next) => {
     try {
-      console.log(req.cookies);
       const { token } = req.cookies;
 
       if (!token) {
@@ -22,12 +21,23 @@ sessionController.logout = async (req, res, next) => {
         return next();
       }
 
+      try{
+        jwt.verify(token, process.env.TOKEN_KEY);
+        res.locals.isLoggedIn = true;
+      } catch (err) {
+        console.log(`Token verification failed: ${err.message}`);
+        res.locals.isLoggedIn = false;
+      }
 
-      jwt.verify(token, process.env.TOKEN_KEY, (err, decoded) => {
-        if (err) {
-          res.locals.loggedIn = false;
-        } else res.locals.loggedIn = true;
-      });
+      // const isVerified = jwt.verify(token, process.env.TOKEN_KEY);
+      // console.log(isVerified);
+
+      // if (isVerified){
+      //   res.locals.isLoggedIn = true;
+      // } else res.locals.isLoggedIn = false;
+
+      return next();
+      
     } catch (err) {
         console.log(`Error: ${err}`);
         return next(err);

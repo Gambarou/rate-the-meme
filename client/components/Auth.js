@@ -6,12 +6,11 @@ import Input from './Input';
 import { FcGoogle } from 'react-icons/fc';
 import { FaGithub } from 'react-icons/fa';
 
-const Auth = () => {
+const Auth = ({ setIsLoggedIn }) => {
     const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-    const [loading, setLoading] = useState(true);
 
     const [view, setView] = useState('login');
     const navigate = useNavigate();
@@ -20,32 +19,14 @@ const Auth = () => {
         setView((currentView) => currentView === 'login' ? 'register' : 'login');
     }, []);
 
-    useEffect(() => {
-      const checkSession = async () => {
-        try {
-          const res = await axios.get('api/check-session');
-          console.log(res);
-          if (res.status === '200') {
-            navigate('/home');
-          } else {
-            throw new Error('Not logged in');
-          }
-        } catch (error) {
-          // Handle error or redirect to the appropriate route
-          console.log(error);
-        }
-      };
-      console.log("Hello this is me from the future!")
-      checkSession();
-    }, []);
-
     const login = useCallback(async () => {
       try {
         await axios.post('api/login', {
           username,
           password
         })
-        navigate('/home')
+        setIsLoggedIn(true);
+        navigate('/');
       } catch (err) {
         if (err.response) {
           setError('Incorrect username or password');
@@ -66,7 +47,7 @@ const Auth = () => {
         login();
       } catch (err) {
         if (err.response && err.response.status === 422) {
-          setError('Email already taken. Please choose a different email.');
+          setError('Email or username already taken.');
         } else {
           setError('Error registering user.')
         }
@@ -93,13 +74,13 @@ const Auth = () => {
 
     return (
       <div className={`relative h-screen w-full bg-no-repeat bg-center bg-fixed bg-cover`}>
-        <div className="bg-black w-full h-full lg:bg-opacity-50">
+        <div className="bg-zinc-900 w-full h-full lg:bg-opacity-50">
           <div className="px-12 py-5 flex flex-col items-center justify-center">
               <div className="text-white text-4xl font-semibold mt-20 mb-4">ℝ𝕒𝕥𝕖 𝕥𝕙𝕖 𝕄𝕖𝕞𝕖</div>
           </div>
           <div className="flex justify-center">
-            <div className="bg-black bg-opacity-70 px-16 py-16 self-center mt-2 lg:w-2/5 lg:max-w-md rounded-md w-full">
-              <h2 className="text-white text-2xl mb-8 font-semibold">
+            <div className="bg-black bg-opacity-70 px-16 py-16 self-center mt-2 lg:w-2/5 lg:max-w-md rounded-md w-full border border-zinc-700">
+              <h2 className="text-white text-3xl mb-8 font-bold">
                 {view === 'login' ? 'Sign in' : 'Register'}
               </h2>
               <div className="flex flex-col gap-4">
@@ -127,7 +108,7 @@ const Auth = () => {
                 />
                 {error && <p className="text-white bg-red-600 px-4 py-3 rounded-md mt-2">{error}</p>}
               </div>
-              <button onClick={view === "login" ? login : register} className="bg-red-600 py-3 text-white rounded-md w-full mt-10 hover:bg-red-700 transition">
+              <button onClick={view === "login" ? login : register} className="bg-blue-600 py-3 text-white rounded-md w-full mt-10 hover:bg-blue-700 transition">
                 {view === "login" ? "Login" : "Sign up"}
               </button>
               <div className="flex flex-row items-center gap-4 mt-8 justify-center"> 

@@ -17,7 +17,7 @@ userController.createUser = async (req, res, next) => {
     res.locals.newUser = newUser;
 
     if (!newUser) {
-      return res.status(500).json({ error: 'Error creating user' })
+      return res.status(500).json({ err: 'Error creating user' })
     } else return next();
 
   } catch (err) {
