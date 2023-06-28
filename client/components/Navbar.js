@@ -25,7 +25,7 @@ function Navbar({ setIsLoggedIn }) {
   };
 
   return (
-    <nav className="bg-white border-gray-200 dark:bg-gray-900">
+    <nav className="sticky bg-white border-gray-200 dark:bg-gray-900">
     <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
       <a className="flex items-center">
         <img src={logo} className="h-8 mr-3" alt="Rate the Meme logo" />
