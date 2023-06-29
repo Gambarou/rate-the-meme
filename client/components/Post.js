@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import meme from '../../public/images/meme1.png'
 
 import { Avatar, Tooltip } from '@mui/material';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
@@ -19,7 +20,7 @@ function Post() {
   }
 
   return (
-    <div className="flex items-start border border-zinc-700 pb-4 m-4 rounded-md">
+    <div className="flex items-start border border-zinc-700 pb-4 border-r-0 border-l-0">
         <div className="p-5">
           <Avatar src='' />
         </div>
@@ -37,8 +38,10 @@ function Post() {
               <p className="text-white text-sm">text</p>
             </div>
           </div>
-          <img src='https://i.redd.it/gqsb2cwtwnn41.gif' alt="" className='rounded-lg'/>
-          <div className="flex justify-between mt-5">
+          <div className="border border-zinc-600 rounded-lg">
+            <img src={meme} alt="" className='rounded-lg w-full h-full object-cover'/>
+          </div>
+          <div className="flex justify-between mt-1">
             
             <div className='flex items-center justify-center group group-hover cursor-pointer'>
               <Tooltip title="Comment" enterDelay={500}>
