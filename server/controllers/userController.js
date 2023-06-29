@@ -2,6 +2,25 @@ const User = require('../models/userModel');
 
 const userController = {};
 
+userController.handleUnlike = async (req, res, next) => {
+  const { userId } = req.params;
+  const { memeId } = req.body;
+
+  try {
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { $pull: { likedImages: memeId }},
+      { new: true }
+    )
+
+    res.locals.updatedUser = updatedUser;
+    return next();
+    
+  } catch (err) {
+    return next(err);
+  }
+}
+
 userController.handleLike = async (req, res, next) => {
   const { userId } = req.params;
   const { memeId } = req.body;
@@ -22,6 +41,23 @@ userController.handleLike = async (req, res, next) => {
 }
 
 userController.createUser = async (req, res, next) => {
+  const avatars = [
+     '/Users/peelintaters/Desktop/solo-project/public/images/alien-avatar.svg',
+     '/Users/peelintaters/Desktop/solo-project/public/images/animal-avatar.svg',
+     '/Users/peelintaters/Desktop/solo-project/public/images/anime-away-face.svg',
+     '/Users/peelintaters/Desktop/solo-project/public/images/avatar-avocado.svg',
+     '/Users/peelintaters/Desktop/solo-project/public/images/avatar-bad-breaking.svg',
+     '/Users/peelintaters/Desktop/solo-project/public/images/avatar-batman.svg',
+     '/Users/peelintaters/Desktop/solo-project/public/images/avatar-bug.svg',
+     '/Users/peelintaters/Desktop/solo-project/public/images/avatar-cacti.svg',
+     '/Users/peelintaters/Desktop/solo-project/public/images/avatar-elderly.svg',
+     '/Users/peelintaters/Desktop/solo-project/public/images/avatar-lazybones-sloth.svg',
+     '/Users/peelintaters/Desktop/solo-project/public/images/avatar-male-ozzy.svg',
+     '/Users/peelintaters/Desktop/solo-project/public/images/fighter-luchador-man-svgrepo-com.svg',
+     '/Users/peelintaters/Desktop/solo-project/public/images/friday-halloween-jason-svgrepo-com.svg'
+    ]
+  const randomAvatar = avatars[Math.floor(Math.random() * avatars.length)];
+    console.log(randomAvatar);
   try {
     const { email, username, password } = req.body;
 
@@ -31,7 +67,7 @@ userController.createUser = async (req, res, next) => {
       return res.status(422).json({ error: 'Email already taken'});
     }
 
-    const newUser = await User.create({ email, username, password });
+    const newUser = await User.create({ avatar: randomAvatar, email, username, password });
 
     res.locals.newUser = newUser;
 

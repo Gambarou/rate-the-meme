@@ -2,6 +2,25 @@ const Meme = require('../models/memeModel');
 
 const memeController = {};
 
+memeController.handleUnlike = async (req, res, next) => {
+  const { memeId } = req.params;
+  const { userId } = req.body;
+
+  try {
+    const updatedMeme = await Meme.findByIdAndUpdate(
+      memeId,
+      { $pull: { likes: userId }},
+      { new: true }
+    )
+
+    res.locals.updatedMeme = updatedMeme;
+    return next();
+
+  } catch (err) {
+    return next(err);
+  }
+}
+
 memeController.handleLike = async (req, res, next) => {
   const { memeId } = req.params;
   const { userId } = req.body;

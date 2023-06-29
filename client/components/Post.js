@@ -13,6 +13,7 @@ const Post = forwardRef(({ memeId, imageUrl, likes, comments }) => {
   const [memeLikes, setMemeLikes] = useState(likes.length);
   const [liked, setLiked] = useState(false);
   const userId = localStorage.getItem('userId');
+  const avatar = localStorage.getItem('avatar');
 
   useEffect(() => {
     if (likes.includes(userId)) {
@@ -27,7 +28,16 @@ const Post = forwardRef(({ memeId, imageUrl, likes, comments }) => {
 
       axios.post(`/api/memes/${memeId}/like`, { userId })
         .then(() => {
-          axios.put(`/api/users/${userId}/likedImages`, { memeId: imageUrl })
+          axios.put(`/api/users/${userId}/likedImages`, { memeId })
+        })
+        .catch((err) => console.log(err));
+    } else {
+      setMemeLikes((prevVal) => prevVal - 1 )
+      setLiked(false);
+
+      axios.post(`/api/memes/${memeId}/unlike`, { userId })
+        .then(() => {
+          axios.put(`/api/users/${userId}/likedImages/remove`, { memeId })
         })
         .catch((err) => console.log(err));
     }
@@ -36,7 +46,7 @@ const Post = forwardRef(({ memeId, imageUrl, likes, comments }) => {
   return (
     <div className="flex items-start border border-zinc-700 pb-4 border-r-0 border-l-0">
         <div className="p-5">
-          <Avatar src='' />
+          <Avatar src="" />
         </div>
         <div className="flex-1 p-4">
           <div className="">

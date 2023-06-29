@@ -17,7 +17,6 @@ const App = () => {
         if (!res.data.loggedIn) {
           setIsLoggedIn(false);
         } else {
-          console.log('We are logged in')
           localStorage.setItem('userId', res.data.userId);
           setIsLoggedIn(true);
         }

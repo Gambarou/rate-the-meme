@@ -38,11 +38,13 @@ const Auth = ({ setIsLoggedIn }) => {
 
     const register = useCallback(async () => {
       try {
-        await axios.post('api/register', {
+        const res = await axios.post('api/register', {
           email,
           username,
           password
         })
+
+        localStorage.setItem('avatar', res.data.avatar);
 
         login();
       } catch (err) {
