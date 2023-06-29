@@ -1,6 +1,4 @@
-import React, { useState } from 'react'
-import meme from '../../public/images/meme1.png'
-import User from '../../server/models/userModel'
+import React, { forwardRef, useState, useEffect } from 'react'
 
 import { Avatar, Tooltip } from '@mui/material';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
@@ -9,21 +7,31 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import PublishIcon from '@mui/icons-material/Publish';
 
-function Post() {
-  const [likes, setLikes] = useState(0);
+import axios from 'axios';
+
+const Post = forwardRef(({ memeId, imageUrl, likes, comments }) => {
+  const [memeLikes, setMemeLikes] = useState(likes.length);
   const [liked, setLiked] = useState(false);
+  const userId = localStorage.getItem('userId');
 
-  const handleClick = (e) => {
-
-    console.log(e.target.value);
-
-    console.log(localStorage.getItem('userId'));
-
-    if (!liked) {
-      setLikes((prevVal) => prevVal + 1 )
+  useEffect(() => {
+    if (likes.includes(userId)) {
       setLiked(true);
     }
-  }
+  }, [likes, userId])
+
+  const handleClick = () => {
+    if (!liked) {
+      setMemeLikes((prevVal) => prevVal + 1 )
+      setLiked(true);
+
+      axios.post(`/api/memes/${memeId}/like`, { userId })
+        .then(() => {
+          axios.put(`/api/users/${userId}/likedImages`, { memeId: imageUrl })
+        })
+        .catch((err) => console.log(err));
+    }
+  };
 
   return (
     <div className="flex items-start border border-zinc-700 pb-4 border-r-0 border-l-0">
@@ -45,7 +53,7 @@ function Post() {
             </div>
           </div>
           <div className="border border-zinc-600 rounded-lg">
-            <img src={meme} alt="" className='rounded-lg w-full h-full object-cover'/>
+            <img src={imageUrl} alt="" className='rounded-lg w-full h-full object-cover'/>
           </div>
           <div className="flex justify-between mt-1">
             
@@ -69,7 +77,7 @@ function Post() {
                   {liked ? (<FavoriteIcon fontSize='small' />) : (<FavoriteBorderIcon fontSize="small" />) }
                 </div>
               </Tooltip>
-              <p className='text-zinc-600 text-sm group-hover:text-pink-500'>{likes}</p>
+              <p className='text-zinc-600 text-sm group-hover:text-pink-500'>{memeLikes}</p>
             </div>
 
             <Tooltip title="Share" enterDelay={500}>
@@ -82,7 +90,8 @@ function Post() {
           </div>
         </div>
       </div>
-  )
-}
+    )
+  }
+);
 
 export default Post

@@ -8,7 +8,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 
 
 
-function Center({ setIsLoggedIn }) {
+function Center({ setIsLoggedIn, memes }) {
     const navigate = useNavigate();
 
     const handleLogout = async () => {
@@ -38,13 +38,15 @@ function Center({ setIsLoggedIn }) {
       </div>
       <div className='-mt-1'>
         <FlipMove >
-            <Post />
-            <Post />
-            <Post />
-            <Post />
-            <Post />
-            <Post />
-            <Post />
+            {memes.map((meme) => { return (
+              <Post 
+                key={meme._id}
+                memeId={meme._id}
+                imageUrl={meme.imageUrl}
+                likes={meme.likes}
+                comments={meme.comments}
+              />
+            )})}
         </FlipMove>
       </div>  
     </div>

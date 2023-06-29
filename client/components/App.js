@@ -38,7 +38,7 @@ const App = () => {
     <BrowserRouter basename={'/'}>
       <Routes>
         {isLoggedIn ? (
-            <Route path="/" element={<Home setIsLoggedIn={setIsLoggedIn} />} />
+            <Route path="/" element={<Home isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />} />
           ) : (
             <Route path="/" element={<Auth setIsLoggedIn={setIsLoggedIn} />} />
           )}

@@ -2,6 +2,25 @@ const User = require('../models/userModel');
 
 const userController = {};
 
+userController.handleLike = async (req, res, next) => {
+  const { userId } = req.params;
+  const { memeId } = req.body;
+
+  try {
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { $addToSet: { likedImages: memeId }},
+      { new: true }
+    )
+
+    res.locals.updatedUser = updatedUser;
+    return next();
+    
+  } catch (err) {
+    return next(err);
+  }
+}
+
 userController.createUser = async (req, res, next) => {
   try {
     const { email, username, password } = req.body;

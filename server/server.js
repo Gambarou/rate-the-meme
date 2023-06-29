@@ -11,6 +11,7 @@ const PORT = '3000';
 
 const app = express();
 const apiRouter = require('./routes/api');
+const memeRouter = require('./routes/memes');
 
 app.use(cors());
 app.use(express.json());
@@ -22,6 +23,7 @@ if (process.env.NODE_ENV === undefined) {
         return res.status(200).sendFile(path.resolve(__dirname, '../index.html'));
     })
 }
+app.use('/api/memes', memeRouter);
 app.use('/api', apiRouter);
 
 app.use('*', (req, res) => {
