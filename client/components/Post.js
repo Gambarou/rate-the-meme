@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import meme from '../../public/images/meme1.png'
+import User from '../../server/models/userModel'
 
 import { Avatar, Tooltip } from '@mui/material';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
@@ -12,7 +13,12 @@ function Post() {
   const [likes, setLikes] = useState(0);
   const [liked, setLiked] = useState(false);
 
-  const handleClick = () => {
+  const handleClick = (e) => {
+
+    console.log(e.target.value);
+
+    console.log(localStorage.getItem('userId'));
+
     if (!liked) {
       setLikes((prevVal) => prevVal + 1 )
       setLiked(true);

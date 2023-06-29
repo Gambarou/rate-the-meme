@@ -1,27 +1,16 @@
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
-const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 
-const userController = require('../server/controllers/userController');
-const cookieController = require('../server/controllers/cookieController');
-const sessionController = require('../server/controllers/sessionController');
 
 require('dotenv').config();
+require('./db')
 
 const PORT = '3000';
 
 const app = express();
-
-
-mongoose.connect(process.env.ATLAS_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    dbName: 'solo-project'
-  })
-   .then(() => console.log("Connected to Mongo DB"))
-   .catch(err => console.log(err));
+const apiRouter = require('./routes/api');
 
 app.use(cors());
 app.use(express.json());
@@ -33,30 +22,7 @@ if (process.env.NODE_ENV === undefined) {
         return res.status(200).sendFile(path.resolve(__dirname, '../index.html'));
     })
 }
-
-app.post('/api/login', userController.verifyUser, cookieController.setSSIDCookie, sessionController.startSession, (req, res) => {
-    if (res.locals.isVerified) {
-      res.sendStatus(200);
-    } else {
-      res.sendStatus(401);
-    }
-})
-
-app.post('/api/logout', (req, res) => {
-    res.clearCookie('token', { httpOnly: true });
-    res.clearCookie('ssid', { httpOnly: true });
-    res.status(200).json({ loggedOut: true });
-  });
-
-app.post('/api/register', userController.createUser, cookieController.setSSIDCookie, sessionController.startSession, (req, res) => {
-    res.status(200).json(res.locals.newUser);
-})
-
-app.get('/api/check-session', sessionController.isLoggedIn, (req, res) => {
-    if (res.locals.isLoggedIn) {
-        res.status(200).json({ loggedIn: true });
-    } else res.status(200).json({ loggedIn: false });
-});
+app.use('/api', apiRouter);
 
 app.use('*', (req, res) => {
     res.status(404).send('Page not found my MAN!');

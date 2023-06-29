@@ -10,7 +10,8 @@ const Schema = mongoose.Schema;
 const userSchema = new Schema({
   username: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
-  password: { type: String, required: true }
+  password: { type: String, required: true },
+  likedImages: [{ type: Schema.Types.ObjectId, ref: 'Meme' }]
 });
 
 userSchema.pre('save', async function(next) {
@@ -38,6 +39,6 @@ userSchema.statics.comparePassword = async function(password, hashedPassword) {
   }
 };
 
-const User = mongoose.model('user', userSchema)
+const User = mongoose.model('User', userSchema)
 
 module.exports = User;

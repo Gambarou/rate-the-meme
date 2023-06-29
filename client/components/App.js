@@ -8,6 +8,7 @@ import Home from "./Home";
 // Your App component
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(() => localStorage.getItem('isLoggedIn') === 'true');
+  const userId = localStorage.getItem('userId');
 
   useEffect(() => {
     const checkSession = async () => {
@@ -17,6 +18,7 @@ const App = () => {
           setIsLoggedIn(false);
         } else {
           console.log('We are logged in')
+          localStorage.setItem('userId', res.data.userId);
           setIsLoggedIn(true);
         }
       } catch (error) {
@@ -26,7 +28,7 @@ const App = () => {
     };
 
     checkSession();
-  }, [isLoggedIn])
+  }, [isLoggedIn, userId])
 
   useEffect(() => {
     localStorage.setItem('isLoggedIn', isLoggedIn);
@@ -36,7 +38,7 @@ const App = () => {
     <BrowserRouter basename={'/'}>
       <Routes>
         {isLoggedIn ? (
-            <Route path="/" element={<Home setIsLoggedIn={setIsLoggedIn}/>} />
+            <Route path="/" element={<Home setIsLoggedIn={setIsLoggedIn} />} />
           ) : (
             <Route path="/" element={<Auth setIsLoggedIn={setIsLoggedIn} />} />
           )}
