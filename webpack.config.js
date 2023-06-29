@@ -59,7 +59,7 @@ module.exports = {
     fallback: {
       crypto: require.resolve('crypto-browserify'),
       stream: false,
-      buffer: require.resolve('buffer/')
+      buffer: require.resolve('buffer/'),
     },
   },
 };

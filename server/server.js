@@ -35,7 +35,7 @@ app.use('*', (req, res) => {
 
 app.use((err, req, res, next) => {
     console.log(err);
-    res.status(500).send({ error: err });
+    res.status(500).json({ error: err });
 });
 
 app.listen(PORT, () => {

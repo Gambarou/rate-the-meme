@@ -17,9 +17,24 @@ const Auth = ({ setIsLoggedIn }) => {
 
     const toggleView = useCallback(() => {
         setView((currentView) => currentView === 'login' ? 'register' : 'login');
+        setError('');
+        setEmail('');
+        setUsername('');
+        setPassword('');
     }, []);
-
+  
     const login = useCallback(async () => {
+
+      if (!username) {
+        setError("Username is required");
+        return;
+      }
+
+      if (!password) {
+        setError("Password is required");
+        return;
+      }
+
       try {
         await axios.post('api/login', {
           username,
@@ -34,9 +49,36 @@ const Auth = ({ setIsLoggedIn }) => {
         setPassword('');
       }
 
-    }, [email, password]);
+    }, [username, password]);
 
     const register = useCallback(async () => {
+
+      const emailPattern = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
+      // Check if the input value matches the email pattern
+      const isValidEmail = emailPattern.test(email);
+
+      if (!email) {
+        setError('Email is required');
+        return;
+      }
+
+      if (!username) {
+        setError('Username is required');
+        return;
+      }
+
+      if (!password) {
+        setError('Password is required');
+        return;
+      }
+
+      if (!isValidEmail) {
+        setError('Invalid email address.')
+        setEmail('')
+        return;
+      }
+
+
       try {
         const res = await axios.post('api/register', {
           email,
@@ -48,10 +90,13 @@ const Auth = ({ setIsLoggedIn }) => {
 
         login();
       } catch (err) {
+        console.log(err.response);
         if (err.response && err.response.status === 422) {
           setError('Email or username already taken.');
+        } else if (err.response.status === 500) {
+          setError('Email or username already exists.')
         } else {
-          setError('Error registering user.')
+          setError('Error registering user.');
         }
         setEmail('');
         setUsername('');
@@ -108,7 +153,7 @@ const Auth = ({ setIsLoggedIn }) => {
                   type="password"
                   value={password}
                 />
-                {error && <p className="text-white bg-red-600 px-4 py-3 rounded-md mt-2">{error}</p>}
+                {error && <p className="text-red-500 text-sm px-4 m-auto">{error}</p>}
               </div>
               <button onClick={view === "login" ? login : register} className="bg-blue-600 py-3 text-white rounded-md w-full mt-10 hover:bg-blue-700 transition">
                 {view === "login" ? "Login" : "Sign up"}

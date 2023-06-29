@@ -19,6 +19,7 @@
 
 body {
     @apply bg-black h-full overflow-x-hidden;
+    font-family: 'Inter', sans-serif;
 }
 
 #__next {

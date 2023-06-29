@@ -80,7 +80,7 @@ const Post = forwardRef(({ memeId, imageUrl, likes, comments }, ref) => {
               <p className='text-zinc-600 text-sm group-hover:text-sky-600'>0</p>
             </div>
             <Tooltip title="Resend" enterDelay={500}>
-              <div className="inline-flex items-center justify-center p-2 rounded-full text-zinc-600 hover:bg-emerald-900 hover:bg-opacity-40 hover:text-emerald-400 cursor-pointer">
+              <div className="inline-flex items-center justify-center p-2 rounded-full text-zinc-600 hover:bg-emerald-900 hover:bg-opacity-40 hover:text-emerald-500 cursor-pointer">
               <RepeatIcon fontSize="small"/>
               </div>
             </Tooltip>
