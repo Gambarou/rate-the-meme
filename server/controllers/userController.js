@@ -4,6 +4,20 @@ const path = require('path');
 
 const userController = {};
 
+userController.getUser = async (req, res, next) => {
+  const { userId } = req.params;
+
+  try {
+    const user = await User.findOne({ _id: userId });
+
+    res.locals.user = user;
+    return next();
+
+  } catch (err) {
+    return next(err);
+  }
+}
+
 userController.handleUnlike = async (req, res, next) => {
   const { userId } = req.params;
   const { memeId } = req.body;
@@ -84,9 +98,14 @@ userController.verifyUser = async (req, res, next) => {
 
     const isMatch = await User.comparePassword(password, user.password);
 
+
     if (!isMatch) {
       res.locals.isVerified = false;
-    } else  res.locals.isVerified = true;
+    } else  {
+      res.locals.isVerified = true;
+      res.locals.userAvatar = user.avatar;
+    }
+      
 
     return next();
   } catch (err) {

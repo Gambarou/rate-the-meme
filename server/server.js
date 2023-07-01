@@ -25,8 +25,6 @@ if (process.env.NODE_ENV === undefined) {
     })
 }
 
-// app.use(express.static(path.join(__dirname, 'public')));
-
 app.use('/api/users', userRouter)
 app.use('/api/memes', memeRouter);
 app.use('/api', apiRouter);

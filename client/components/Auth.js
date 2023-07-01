@@ -28,19 +28,20 @@ const Auth = ({ setIsLoggedIn }) => {
         setError("Username is required");
         return;
       }
-
       if (!password) {
         setError("Password is required");
         return;
       }
 
-      localStorage.setItem('username', username)
-
       try {
-        await axios.post('api/login', {
+        const res = await axios.post('api/login', {
           username,
           password
         })
+  
+        localStorage.setItem('username', username);
+        localStorage.setItem('avatar', res.data.avatar);
+
         setIsLoggedIn(true);
         navigate('/');
       } catch (err) {
@@ -86,8 +87,6 @@ const Auth = ({ setIsLoggedIn }) => {
           username,
           password
         })
-
-        localStorage.setItem('avatar', res.data.avatar);
 
         login();
       } catch (err) {

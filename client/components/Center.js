@@ -15,8 +15,7 @@ function Center({ setIsLoggedIn }) {
     const [openModal, setOpenModal] = useState(false);
     const [isUrlValid, setIsUrlValid] = useState(true);
     const [fileUrl, setFileUrl] = useState('');
-    const [avatarSvg, setAvatarSvg] = useState(null);
-    const avatar = `${localStorage.getItem('avatar')}`;
+    const userId = localStorage.getItem('userId');
 
     const navigate = useNavigate();
 
@@ -37,7 +36,13 @@ function Center({ setIsLoggedIn }) {
       } 
 
       try {
-        const res = await axios.post('/api/memes', { imageUrl: fileUrl });
+        const username = localStorage.getItem('username');
+
+        const userRes = await axios.get(`/api/users/${userId}`);
+        const user = userRes.data;
+        console.log('Username: ', username)
+
+        const res = await axios.post('/api/memes', { imageUrl: fileUrl, username: user.username, avatar: user.avatar });
         const newMeme = res.data;
 
         setImages(prevImages => [newMeme, ...prevImages])
@@ -53,19 +58,10 @@ function Center({ setIsLoggedIn }) {
     }
 
     const handleCloseModal = () => {
+      setFileUrl('');
       setOpenModal(false);
     }
 
-    useEffect(() => {
-
-    if (avatar) {
-      import(`../../public${avatar}?url`)
-        .then((module) => {
-          setAvatarSvg(module.default);
-        })
-        .catch(err => console.log(err)); 
-    }
-  }, [avatar]);
 
     useEffect(() => {
         axios.get('/api/memes')
@@ -82,6 +78,8 @@ function Center({ setIsLoggedIn }) {
       
           if (res.data.loggedOut) {
               setIsLoggedIn(false)
+              localStorage.removeItem('username');
+              localStorage.removeItem('avatar');
               setTimeout(() => {
                 navigate('/');
               }, 200)
@@ -116,7 +114,8 @@ function Center({ setIsLoggedIn }) {
                 imageUrl={meme.imageUrl}
                 likes={meme.likes}
                 comments={meme.comments}
-                avatar={avatarSvg}
+                avatar={meme.avatar}
+                username={meme.username}
               />
             )})}
         </FlipMove>

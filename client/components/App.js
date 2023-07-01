@@ -12,10 +12,9 @@ const App = () => {
 
   useEffect(() => {
 
-    console.log(localStorage.getItem('avatar'));
     const checkSession = async () => {
       try {
-        const res = await axios.get('api/check-session');
+        const res = await axios.get('/api/check-session');
         if (!res.data.loggedIn) {
           setIsLoggedIn(false);
         } else {

@@ -4,6 +4,10 @@ const userController = require('../controllers/userController');
 
 const router = express.Router();
 
+router.get('/:userId', userController.getUser, (req, res) => {
+  res.status(200).json(res.locals.user);
+})
+
 router.put('/:userId/likedImages/remove', userController.handleUnlike, (req, res) => {
   res.status(200).json(res.locals.updatedUser);
 })

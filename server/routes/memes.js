@@ -12,12 +12,16 @@ router.post('/', memeController.createMeme, (req, res) => {
   res.status(200).json(res.locals.meme);
 });
 
+router.post('/messages', memeController.uploadMessage, (req, res) => {
+  res.status(200).json(res.locals.updatedMessages);
+})
+
 router.post('/:memeId/like', memeController.handleLike, (req, res) => {
   res.status(200).json(res.locals.updatedMeme);
-})
+});
 
 router.post('/:memeId/unlike', memeController.handleUnlike, (req, res) => {
   res.status(200).json(res.locals.updatedMeme);
-})
+});
 
 module.exports = router;

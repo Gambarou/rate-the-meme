@@ -40,6 +40,28 @@ memeController.handleLike = async (req, res, next) => {
   }
 }
 
+memeController.uploadMessage = async (req, res, next) => {
+  const { _id, message, username, avatar } = req.body
+
+  try {
+    const updatedMessages = await Meme.findByIdAndUpdate(
+      _id, 
+      { $addToSet: { comments: {
+        text: message,
+        username,
+        avatar,
+      } }},
+      { new: true }
+    )
+
+    res.locals.updatedMessages = updatedMessages;
+  
+    return next();
+  } catch (err) {
+    return next(err);
+  }
+}
+
 memeController.getMemes = async (req, res, next) => {
   try {
     const memes = await Meme.find({});
@@ -51,12 +73,11 @@ memeController.getMemes = async (req, res, next) => {
 };
 
 memeController.createMeme = async (req, res, next) => {
-  const { imageUrl } = req.body;
+  const { imageUrl, userId, username, avatar } = req.body;
 
   try {
-    const newMeme = await Meme.create({ imageUrl });
+    const newMeme = await Meme.create({ imageUrl, user: userId, username, avatar });
     res.locals.meme = newMeme;
-    console.log(newMeme);
     return next()
 
   } catch (err) {
