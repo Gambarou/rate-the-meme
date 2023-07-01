@@ -11,7 +11,7 @@ import axios from 'axios';
 import ChatBox from './ChatBox';
 
 
-const Post = forwardRef(({ memeId, imageUrl, likes, comments, avatar, username }, ref) => {
+const Post = forwardRef(({ memeId, imageUrl, likes, comments, avatar, username,  updateComments }, ref) => {
   const [memeLikes, setMemeLikes] = useState(likes.length);
   const [numOfMessages, setNumOfMessages] = useState(comments.length);
   const [liked, setLiked] = useState(false);
@@ -71,7 +71,7 @@ const Post = forwardRef(({ memeId, imageUrl, likes, comments, avatar, username }
   };
 
   const handleNewMessage = (newMessage) => {
-    setMessages(prevMessages => [ ...prevMessages, newMessage ])
+    setMessages(prevMessages => [ ...prevMessages, newMessage ].reverse())
     setNumOfMessages(prevNum => prevNum + 1);
   }
 

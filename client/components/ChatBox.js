@@ -23,9 +23,9 @@ function ChatBox({ memeId, comments, currentUser: { avatar, username }, onNewMes
   }, [avatar]);
 
   useEffect(() => {
-    const reversedComments = [...comments].reverse();
+    const reversedComments = [...comments];
     setMessages(reversedComments);
-  }, []);
+  }, [comments]);
 
   const handleScroll = () => {
     const chatBox = chatBoxRef.current
@@ -49,7 +49,8 @@ function ChatBox({ memeId, comments, currentUser: { avatar, username }, onNewMes
       setMessage('');
       const updatedMeme = await axios.post('/api/memes/messages', { _id: memeId, message, avatar, username });
       if (updatedMeme) {
-        setMessages([...updatedMeme.data.comments.reverse()]);
+        const reversedComments = [...updatedMeme.data.comments].reverse();
+        setMessages(reversedComments);
         onNewMessage(message);
       }
     } catch (err) {
@@ -84,7 +85,7 @@ function ChatBox({ memeId, comments, currentUser: { avatar, username }, onNewMes
             <label onClick={handleMessage} htmlFor='message' className='bg-black text-zinc-200 text-sm -translate-x-4 cursor-pointer hover:text-zinc-400'>Submit</label>
           </div>
         </div>
-        <div className='text-white' onScroll={handleScroll}>
+        <div className='text-white' onScroll={handleScroll} ref={chatBoxRef}>
         {messages.map((message) => {
           return (
             <Message key={message._id} avatar={message.avatar} username={message.username} message={message.text} />
