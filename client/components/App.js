@@ -11,6 +11,8 @@ const App = () => {
   const userId = localStorage.getItem('userId');
 
   useEffect(() => {
+
+    console.log(localStorage.getItem('avatar'));
     const checkSession = async () => {
       try {
         const res = await axios.get('api/check-session');

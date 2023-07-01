@@ -9,10 +9,24 @@ import PublishIcon from '@mui/icons-material/Publish';
 
 import axios from 'axios';
 
-const Post = forwardRef(({ memeId, imageUrl, likes, comments }, ref) => {
+
+const Post = forwardRef(({ memeId, imageUrl, likes, comments, avatar }, ref) => {
   const [memeLikes, setMemeLikes] = useState(likes.length);
   const [liked, setLiked] = useState(false);
+  // const [avatarSvg, setAvatarSvg] = useState(null);
   const userId = localStorage.getItem('userId');
+  // const avatar = `${localStorage.getItem('avatar')}`;
+
+  // useEffect(() => {
+
+  //   if (avatar) {
+  //     import(`../../public${avatar}?url`)
+  //       .then((module) => {
+  //         setAvatarSvg(module.default);
+  //       })
+  //       .catch(err => console.log(err)); 
+  //   }
+  // }, [avatar]);
 
   useEffect(() => {
     if (likes.includes(userId)) {
@@ -45,7 +59,7 @@ const Post = forwardRef(({ memeId, imageUrl, likes, comments }, ref) => {
   return (
     <div className="flex items-start border border-zinc-700 pb-4 border-r-0 border-l-0">
         <div className="p-5">
-          <Avatar src="" />
+          <Avatar src={avatar} alt={localStorage.getItem('username')}/>
         </div>
         <div className="flex-1 p-4">
           <div className="">
@@ -53,7 +67,7 @@ const Post = forwardRef(({ memeId, imageUrl, likes, comments }, ref) => {
               <h3 className="text-md mb-1 text-white">
                 {/* {'displayName'}{" "} */}
                 <span className="text-gray-500 text-sm">
-                  {/* {'username'} */}
+                  {localStorage.getItem('username')}
                 </span>
               </h3>
             </div>
@@ -74,21 +88,21 @@ const Post = forwardRef(({ memeId, imageUrl, likes, comments }, ref) => {
             <div className='flex items-center justify-center group group-hover cursor-pointer'>
               <Tooltip title="Comment" enterDelay={500}>
                 <div className="inline-flex items-center justify-center p-2 rounded-full text-zinc-600 group-hover:bg-cyan-900 group-hover:bg-opacity-30 group-hover:text-sky-600">
-                  <ChatBubbleOutlineIcon fontSize="small" />
+                  <ChatBubbleOutlineIcon fontSize="medium" />
                 </div>
               </Tooltip>
               <p className='text-zinc-600 text-sm group-hover:text-sky-600'>0</p>
             </div>
             <Tooltip title="Resend" enterDelay={500}>
               <div className="inline-flex items-center justify-center p-2 rounded-full text-zinc-600 hover:bg-emerald-900 hover:bg-opacity-40 hover:text-emerald-500 cursor-pointer">
-              <RepeatIcon fontSize="small"/>
+              <RepeatIcon fontSize="medium"/>
               </div>
             </Tooltip>
 
             <div onClick={handleClick} className='flex items-center justify-center group group-hover cursor-pointer'>
               <Tooltip title="Like" enterDelay={500}>
                 <div className={`inline-flex items-center justify-center p-2 rounded-full ${liked ? 'text-pink-600' : 'text-zinc-600'} group-hover:bg-pink-900 group-hover:bg-opacity-30 group-hover:text-pink-600`}>
-                  {liked ? (<FavoriteIcon fontSize='small' />) : (<FavoriteBorderIcon fontSize="small" />) }
+                  {liked ? (<FavoriteIcon fontSize="medium" />) : (<FavoriteBorderIcon fontSize="medium" />) }
                 </div>
               </Tooltip>
               <p className='text-zinc-600 text-sm group-hover:text-pink-500'>{memeLikes}</p>
@@ -97,7 +111,7 @@ const Post = forwardRef(({ memeId, imageUrl, likes, comments }, ref) => {
             <Tooltip title="Share" enterDelay={500}>
               <div className="inline-flex items-center justify-center p-2 rounded-full text-zinc-600 hover:bg-cyan-900 hover:bg-opacity-30 hover:text-sky-600 cursor-pointer">
               <PublishIcon
-                  fontSize="small"
+                  fontSize="medium"
               />
               </div>
             </Tooltip>

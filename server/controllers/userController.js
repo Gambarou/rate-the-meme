@@ -1,4 +1,6 @@
 const User = require('../models/userModel');
+const fs = require('fs');
+const path = require('path');
 
 const userController = {};
 
@@ -41,18 +43,22 @@ userController.handleLike = async (req, res, next) => {
 }
 
 userController.createUser = async (req, res, next) => {
+  const avatarFilenames = fs.readdirSync(path.resolve(__dirname, '../../public/images'));
+  const randIdx = Math.floor(Math.random() * avatarFilenames.length);
+  const avatarFilename = avatarFilenames[randIdx];
+  const avatarPath = `/images/${avatarFilename}`;
 
   try {
     const { email, username, password } = req.body;
-
+    
     const exisitingUser = await User.findOne({ email });
-
+    
     if (exisitingUser) {
       return res.status(422).json({ error: 'Email already taken'});
     }
-
-    const newUser = await User.create({ email, username, password });
-
+    
+    const newUser = await User.create({ avatar: avatarPath, email, username, password });
+    
     res.locals.newUser = newUser;
 
     if (!newUser) {
@@ -66,6 +72,7 @@ userController.createUser = async (req, res, next) => {
 
 userController.verifyUser = async (req, res, next) => {
   const { username, password } = req.body;
+  res.locals.username = username;
 
   try {
     const user = await User.findOne({ username });

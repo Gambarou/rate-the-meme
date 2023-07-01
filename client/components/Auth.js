@@ -24,7 +24,6 @@ const Auth = ({ setIsLoggedIn }) => {
     }, []);
   
     const login = useCallback(async () => {
-
       if (!username) {
         setError("Username is required");
         return;
@@ -34,6 +33,8 @@ const Auth = ({ setIsLoggedIn }) => {
         setError("Password is required");
         return;
       }
+
+      localStorage.setItem('username', username)
 
       try {
         await axios.post('api/login', {

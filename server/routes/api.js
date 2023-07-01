@@ -14,7 +14,7 @@ router.get('/check-session', sessionController.isLoggedIn, (req, res) => {
 
 router.post('/login', userController.verifyUser, cookieController.setSSIDCookie, sessionController.startSession, (req, res) => {
     if (res.locals.isVerified) {
-      res.sendStatus(200);
+      res.status(200).json(res.locals.username);
     } else {
       res.sendStatus(401);
     }

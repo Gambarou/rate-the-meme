@@ -18,7 +18,7 @@
   }
 
 body {
-    @apply bg-black h-full overflow-x-hidden;
+    @apply bg-black bg-opacity-95 h-full overflow-x-hidden;
     font-family: 'Inter', sans-serif;
 }
 

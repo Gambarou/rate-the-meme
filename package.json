@@ -37,12 +37,14 @@
     "react-flip-move": "^3.0.5",
     "react-icons": "^4.10.1",
     "react-router-dom": "^6.13.0",
+    "react-svg-loader": "^3.0.3",
     "stream-browserify": "^3.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.22.5",
     "@babel/preset-env": "^7.22.5",
     "@babel/preset-react": "^7.22.5",
+    "@svgr/webpack": "^8.0.1",
     "babel-loader": "^9.1.2",
     "concurrently": "^8.2.0",
     "css-loader": "^6.8.1",
