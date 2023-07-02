@@ -4,7 +4,7 @@ import axios from 'axios'
 import Message from './Message'
 import { Avatar } from '@mui/material'
 
-function ChatBox({ memeId, comments, currentUser: { avatar, username }, onNewMessage }) {
+function ChatBox({ memeId, comments, currentUser: { avatar, username }, onNewMessage, isChatOpen }) {
   const [message, setMessage] = useState('')
   const [messages, setMessages] = useState([]);
   const [avatarSvg, setAvatarSvg] = useState(null);
@@ -23,8 +23,10 @@ function ChatBox({ memeId, comments, currentUser: { avatar, username }, onNewMes
   }, [avatar]);
 
   useEffect(() => {
-    const reversedComments = [...comments];
-    setMessages(reversedComments);
+    if (isChatOpen) {
+      const reversedComments = [...comments].reverse();
+      setMessages(reversedComments);
+    }
   }, [comments]);
 
   const handleScroll = () => {
@@ -49,8 +51,8 @@ function ChatBox({ memeId, comments, currentUser: { avatar, username }, onNewMes
       setMessage('');
       const updatedMeme = await axios.post('/api/memes/messages', { _id: memeId, message, avatar, username });
       if (updatedMeme) {
-        const reversedComments = [...updatedMeme.data.comments].reverse();
-        setMessages(reversedComments);
+        const comments = [...updatedMeme.data.comments].reverse();
+        setMessages(comments);
         onNewMessage(message);
       }
     } catch (err) {
@@ -97,4 +99,4 @@ function ChatBox({ memeId, comments, currentUser: { avatar, username }, onNewMes
   )
 }
 
-export default ChatBox
+export default React.memo(ChatBox)

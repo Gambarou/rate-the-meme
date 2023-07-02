@@ -13,9 +13,9 @@ import ChatBox from './ChatBox';
 
 const Post = forwardRef(({ memeId, imageUrl, likes, comments, avatar, username,  updateComments }, ref) => {
   const [memeLikes, setMemeLikes] = useState(likes.length);
-  const [numOfMessages, setNumOfMessages] = useState(comments.length);
   const [liked, setLiked] = useState(false);
-  const [messages, setMessages] = useState([...comments.reverse()]);
+  const [messages, setMessages] = useState([...comments]);
+  const [numOfMessages, setNumOfMessages] = useState(comments.length);
   const [avatarSvg, setAvatarSvg] = useState(null);
   const [isChatOpen, setIsChatOpen] = useState(false);
 
@@ -41,11 +41,7 @@ const Post = forwardRef(({ memeId, imageUrl, likes, comments, avatar, username, 
 
 
   const handleComment = () => {
-    if (!isChatOpen) {
-      setIsChatOpen(true);
-    } else {
-      setIsChatOpen(false);
-    }
+    setIsChatOpen(prevState => !prevState);
   }
 
   const handleLikeAndUnlike = () => {
@@ -70,8 +66,12 @@ const Post = forwardRef(({ memeId, imageUrl, likes, comments, avatar, username, 
     }
   };
 
+  useEffect(() => {
+    console.log(messages);
+  }, [isChatOpen])
+
   const handleNewMessage = (newMessage) => {
-    setMessages(prevMessages => [ ...prevMessages, newMessage ].reverse())
+    setMessages(prevMessages => [ ...prevMessages, newMessage ])
     setNumOfMessages(prevNum => prevNum + 1);
   }
 
@@ -128,10 +128,12 @@ const Post = forwardRef(({ memeId, imageUrl, likes, comments, avatar, username, 
         </div>
         {isChatOpen ? (
           <ChatBox 
+            key={isChatOpen ? 'open' : 'closed'}
             memeId={memeId} 
             comments={comments} 
             currentUser={{ username: localStorage.getItem('username'), avatar: localStorage.getItem('avatar') }}
             onNewMessage={handleNewMessage}
+            isChatOpen={isChatOpen}
           /> 
         ) : null}
       </div>

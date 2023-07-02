@@ -45,7 +45,7 @@ function Center({ setIsLoggedIn }) {
         const res = await axios.post('/api/memes', { imageUrl: fileUrl, username: user.username, avatar: user.avatar });
         const newMeme = res.data;
 
-        setImages(prevImages => [newMeme, ...prevImages])
+        setImages(prevImages => [...prevImages, newMeme])
 
         // reset the input field and close the modal
         setFileUrl('');
@@ -107,7 +107,7 @@ function Center({ setIsLoggedIn }) {
       </div>
       <div className='-mt-1'>
         <FlipMove >
-            {images.reverse().map((meme) => { return (
+            {images.map((meme) => { return (
               <Post 
                 key={meme._id}
                 memeId={meme._id}
