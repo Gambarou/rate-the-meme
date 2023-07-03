@@ -1,10 +1,7 @@
 import React, { useCallback, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
-import Input from './Input';
-
-import { FcGoogle } from 'react-icons/fc';
-import { FaGithub } from 'react-icons/fa';
+import SignIn from "./SignIn";
 
 const Auth = ({ setIsLoggedIn }) => {
     const [email, setEmail] = useState('');
@@ -32,7 +29,6 @@ const Auth = ({ setIsLoggedIn }) => {
         setError("Password is required");
         return;
       }
-
       try {
         const res = await axios.post('api/login', {
           username,
@@ -54,7 +50,6 @@ const Auth = ({ setIsLoggedIn }) => {
     }, [username, password]);
 
     const register = useCallback(async () => {
-
       const emailPattern = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
       // Check if the input value matches the email pattern
       const isValidEmail = emailPattern.test(email);
@@ -63,26 +58,22 @@ const Auth = ({ setIsLoggedIn }) => {
         setError('Email is required');
         return;
       }
-
       if (!username) {
         setError('Username is required');
         return;
       }
-
       if (!password) {
         setError('Password is required');
         return;
       }
-
       if (!isValidEmail) {
         setError('Invalid email address.')
         setEmail('')
         return;
       }
 
-
       try {
-        const res = await axios.post('api/register', {
+        await axios.post('api/register', {
           email,
           username,
           password
@@ -113,7 +104,6 @@ const Auth = ({ setIsLoggedIn }) => {
 
     useEffect(() => {
       document.addEventListener('keydown', handleKeyDown);
-
       return () => {
           document.removeEventListener('keydown', handleKeyDown);
       };
@@ -126,75 +116,19 @@ const Auth = ({ setIsLoggedIn }) => {
               <div className="text-white text-4xl font-semibold mt-20 mb-4">ℝ𝕒𝕥𝕖 𝕥𝕙𝕖 𝕄𝕖𝕞𝕖</div>
           </div>
           <div className="flex justify-center">
-            <div className="bg-black bg-opacity-70 px-16 py-16 self-center mt-2 lg:w-2/5 lg:max-w-md rounded-md w-full border border-zinc-700">
-              <h2 className="text-white text-3xl mb-8 font-bold">
-                {view === 'login' ? 'Sign in' : 'Register'}
-              </h2>
-              <div className="flex flex-col gap-4">
-                {view === 'register' && (
-                  <Input
-                    label="Email"
-                    onChange={((e) => setEmail(e.target.value))}
-                    id="email"
-                    type="email"
-                    value={email}
-                  />
-                )}
-                <Input
-                  label="Username"
-                  onChange={(e) => setUsername(e.target.value)}
-                  id="username"
-                  value={username}
+          <SignIn
+                  view={view}
+                  username={username}
+                  password={password}
+                  email={email}
+                  error={error}
+                  setUsername={setUsername}
+                  setPassword={setPassword}
+                  setEmail={setEmail}
+                  login={login}
+                  register={register}
+                  toggleView={toggleView}
                 />
-                <Input
-                  label="Password"
-                  onChange={(e) => setPassword(e.target.value)}
-                  id="password"
-                  type="password"
-                  value={password}
-                />
-                {error && <p className="text-red-500 text-sm px-4 m-auto">{error}</p>}
-              </div>
-              <button onClick={view === "login" ? login : register} className="bg-blue-600 py-3 text-white rounded-md w-full mt-10 hover:bg-blue-700 transition">
-                {view === "login" ? "Login" : "Sign up"}
-              </button>
-              <div className="flex flex-row items-center gap-4 mt-8 justify-center"> 
-                <div className="
-                      w-10
-                      h-10
-                      bg-white
-                      rounded-full
-                      flex
-                      items-center
-                      justify-center
-                      cursor-pointer
-                      hover:opacity-80
-                      transition
-                    ">
-                      <FcGoogle size={30} />
-                    </div>
-                <div className="
-                      w-10
-                      h-10
-                      bg-white
-                      rounded-full
-                      flex
-                      items-center
-                      justify-center
-                      cursor-pointer
-                      hover:opacity-80
-                      transition
-                    ">
-                      <FaGithub size={30} />
-                    </div>
-              </div>
-                <p className="text-neutral-500 mt-12 text-sm">
-                  {view === "login" ? "First time using Rate the Meme?" : "Already have an account?"}
-                  <span onClick={toggleView} className="text-white ml-1 hover:underline cursor-pointer">
-                    {view === "login" ? "Create an account" : "Login"}
-                  </span>        
-                </p>
-              </div>
             </div>
           </div>
         </div>

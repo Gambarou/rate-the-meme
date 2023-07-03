@@ -40,6 +40,19 @@ memeController.handleLike = async (req, res, next) => {
   }
 }
 
+memeController.getMessages = async (req, res, next) => {
+  const { memeId } = req.query;
+
+  try {
+    const meme = await Meme.findOne({ _id: memeId});
+
+    res.locals.messages = meme.comments;
+    return next();
+  } catch (err) {
+    return next(err)
+  }
+}
+
 memeController.uploadMessage = async (req, res, next) => {
   const { _id, message, username, avatar } = req.body
 
@@ -84,5 +97,17 @@ memeController.createMeme = async (req, res, next) => {
     return next(`Error in memeController.createMeme: ${err}`);
   }
 };
+ 
+memeController.deleteMeme = async (req, res, next) => {
+  const { memeId } = req.params;
+
+  try {
+    await Meme.findOneAndDelete({ _id: memeId });
+    
+    return next();
+  } catch (err) {
+    return next(err);
+  }
+}
 
 module.exports = memeController;
