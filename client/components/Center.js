@@ -4,6 +4,8 @@ import axios from 'axios';
 import Post from './Post';
 import Header from './Header';
 import Upload from './Upload';
+import { fetchUser } from '../fetchers/user';
+import { postMeme, deleteMeme } from '../fetchers/meme';
 
 
 function Center({ setIsLoggedIn }) {
@@ -28,11 +30,9 @@ function Center({ setIsLoggedIn }) {
     } 
 
     try {
-      const userRes = await axios.get(`/api/users/${userId}`);
-      const user = userRes.data;
+      const user = await fetchUser(userId);
 
-      const res = await axios.post('/api/memes', { imageUrl: fileUrl, username: user.username, avatar: user.avatar });
-      const newMeme = res.data;
+      const newMeme = await postMeme(fileUrl, user);
 
       setMemesData(prevMemesData => [newMeme, ...prevMemesData])
 
@@ -124,7 +124,7 @@ function Center({ setIsLoggedIn }) {
 
   const handleDelete = async (memeId) => {
     try {
-      await axios.delete(`/api/memes/${memeId}`);
+      await deleteMeme(memeId);
       setMemesData(prevMemesData => prevMemesData.filter(meme => meme._id !== memeId));
     } catch (err) {
       console.log(err);
@@ -135,7 +135,7 @@ function Center({ setIsLoggedIn }) {
     <div className="flex-0.4 bg-black h-full border border-t-0 border-b-0 border-zinc-700 overflow-y-scroll no-scrollbar">
       <Header handleOpenModal={handleOpenModal} handleLogout={handleLogout} />
       <div className='-mt-1'>
-        <div >
+        <div className='flex flex-col'>
             {memesData.map((meme) => { return (
               <Post 
                 key={meme._id}

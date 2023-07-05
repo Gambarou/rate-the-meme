@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunksolo_project=self.webpackChunksolo_project||[]).push([[557],{557:(e,c,s)=>{s.r(c),s.d(c,{default:()=>o});const o=s.p+"97bd55e6fc56c0e598cd5ee4c64e6e2e.svg"}}]);

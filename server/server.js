@@ -19,7 +19,7 @@ app.use(express.json());
 app.use(cookieParser())
 
 if (process.env.NODE_ENV === undefined) {
-    app.use('/build', express.static(path.resolve(__dirname, '../build')));
+    app.use(express.static(path.resolve(__dirname, '../build')));
     app.get('/', (req, res) => {
         return res.status(200).sendFile(path.resolve(__dirname, '../index.html'));
     })

@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunksolo_project=self.webpackChunksolo_project||[]).push([[739],{5739:Y=>{Y.exports="data:image/svg+xml;base64,ZXhwb3J0IGRlZmF1bHQgX193ZWJwYWNrX3B1YmxpY19wYXRoX18gKyAiOTRkYTkxNjY2Y2VkYjYwZTkzYzQ5YTJmYzAwYjY4Y2Muc3ZnIjs="}}]);

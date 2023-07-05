@@ -78,7 +78,7 @@ const Post = ({ memeId, imageUrl, likes, comments, avatar, username, handleDelet
           }
         </span>
       </div>
-        <div className="flex-1 ml-12 px-4">
+        <div className="flex-1 ml-20 px-4">
           <div className="border border-zinc-600 rounded-lg">
             {
               imageUrl.endsWith('.mp4') ? (<video src={imageUrl} autoPlay loop muted className='rounded-lg w-full h-full object-cover' loading="lazy"></video>) : 
